@@ -2,43 +2,43 @@ package com.examples.aboutme
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.examples.aboutme.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var doneButton: Button
-    lateinit var nicknameTextView: TextView
-    lateinit var nickname: TextView
+    private lateinit var binding: ActivityMainBinding
+
+    private val myName: MyName = MyName(name = "Steven Dang")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        nickname = findViewById(R.id.nickname_text)
-        nicknameTextView = findViewById(R.id.nickname_text_view)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        doneButton = findViewById<Button>(R.id.done_button)
+        binding.myName = this.myName
 
-        doneButton.setOnClickListener{
+        binding.doneButton.setOnClickListener {
             addNickname(it)
         }
 
     }
 
     @SuppressLint("SetTextI18n")
-    private fun addNickname(view: View){
-        val nickNameText = nicknameTextView.text
+    private fun addNickname(view: View) {
 
-        nickname.text = nickNameText
-
-        nickname.visibility = View.VISIBLE
-        doneButton.visibility = View.GONE
-        nicknameTextView.visibility = View.GONE
+        binding.apply {
+            this.myName?.nickname = nicknameTextView.text.toString()
+            invalidateAll()
+            nicknameText.visibility = View.VISIBLE
+            doneButton.visibility = View.GONE
+            nicknameTextView.visibility = View.GONE
+        }
 
 
         // Hide the keyboard.
